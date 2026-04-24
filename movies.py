@@ -177,3 +177,41 @@ print("LINEAR REGRESSION RMSE NORMALIZED: " + str(rmse_linear_normalized))
 
 print("We expect the feature normalization to not change anything for the linear regression model " \
 "any discrepancies are likely due to floating point rounding or something of that nature")
+
+#source for MLPREgressor since I had to learn how to use it, since we didn't use it in class
+# https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPRegressor.html
+
+from sklearn.neural_network import MLPRegressor
+
+def neural_network_predict(X_train, y_train, X_test):
+    #Source Notebook 16
+    #Same general ideas as in the notebook, only differences lie in minor logic changes, 
+    # which will be explained in comments
+    model = MLPRegressor(
+    hidden_layer_sizes=(128, 64),
+    early_stopping=True,
+    n_iter_no_change=10,
+    validation_fraction=0.25,
+    max_iter=500,
+    random_state=42)
+
+    model.fit(X_train, y_train)
+
+    y_pred = model.predict(X_test)
+
+    return model, y_pred
+
+model_nn, y_pred_nn = neural_network_predict(X_train, y_train, X_test)
+rmse_nn_non_normalized = compute_metrics(y_test, y_pred_nn)
+print("NEURAL NETWORK RMSE NON NORMALIZED: " + str(rmse_nn_non_normalized))
+print("NEURAL NETWORK EPOCHS NON NORMALIZED: " + str(model_nn.n_iter_))
+
+
+# Neural Network with normalization
+model_nn_norm, y_pred_nn_norm = neural_network_predict(X_train_norm, y_train, X_test_norm)
+rmse_nn_normalized = compute_metrics(y_test, y_pred_nn_norm)
+print("NEURAL NETWORK RMSE NORMALIZED: " + str(rmse_nn_normalized))
+print("NEURAL NETWORK EPOCHS NORMALIZED: " + str(model_nn_norm.n_iter_))
+
+print("We expect the feature normalization to not change anything for the neural network model " \
+"but what we learned is the opposite. That neural networks are very dependent on scaling")
