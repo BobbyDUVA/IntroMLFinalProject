@@ -9,7 +9,7 @@ from sklearn.decomposition import PCA
 #from dateutil import parser
 
 
-m = pd.read_csv("C:\\Users\\rfd\\UVASemester8\\ECE2410\\Project\\IntroMLFinalProject\\movie.csv")
+m = pd.read_csv("C:\\Users\\Zach\\Documents\\FINALPROJECTML\\IntroMLFinalProject\\movie.csv")
 
 # ORIGINAL instances (movies): 636 
 # ORIGINIAL attributes (information about movies): 11
@@ -83,7 +83,7 @@ newMovieData["rating_count"] = m["rating_count"]
 newMovieData["rating"] = m["rating"]
 
 
-X = newMovieData.drop(["title", "rating"]) # remove label and target variable from X
+X = newMovieData.drop(["title", "rating"], axis = 1) # remove label and target variable from X
 y = newMovieData["rating"]
 
 
@@ -103,111 +103,21 @@ print(len(newMovieData)) # 634 movies
 
 from sklearn.model_selection import train_test_split
 
+def train_test_split(X, y, test_size = 0.2, random_state = 42):  # Source Notebook 3: 1.3, direct implementation of given code
+    np.random.seed(random_state)
+
+    N = len(y)
+    n_test = int(N * test_size)
+
+    indices = np.random.permutation(N)
+
+    test_indices = indices[:n_test]
+    train_indices = indices[n_test:]
+    return X[train_indices], X[test_indices], y[train_indices], y[test_indices]
 
 
+X_train, X_test, y_train, y_test = train_test_split(X, y)
+print(f"Train: {len(y_train)}, Test: {len(y_test)}")
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# # FIT
-# # fit data to the k-means clustering algorithm (Lloyd's or Elkan's)
-# # use elbow method to find appropriate number of clusters (using within cluster sum of squares errors: WCSS value)
-# def elbow(dataSet, numClustersToConsider):
-#     wcss = []
-#     for i in range(1,numClustersToConsider+1):
-#         kmeans = KMeans(n_clusters=i)
-#         kmeans.fit(dataSet)
-#         # inertia calculates the sum of the distances between each datapoint and its centroid. squaring the distance, and summing these squares across a cluster
-#         wcss.append(kmeans.inertia_)
-#     k = np.arange(1,11)
-#     plt.plot(k,wcss)
-#     plt.tick_params(axis='both', which='major', labelsize=18)  # Adjust numerical label size here
-#     plt.xlabel("Number of Clusters", fontsize=20)
-#     plt.ylabel("WCSS", fontsize=20)
-#     plt.show()
-
-# #elbow(dataSet=newMovieData.drop("title", axis=1), numClustersToConsider=10)
-# # four clusters
-
-# #CLUSTER
-# # run kmeans wih 4 clusters
-# numClusters = 4
-# kmeans = KMeans(n_clusters=numClusters)
-# kmeans.fit(newMovieData.drop("title", axis=1))
-
-
-# # POST-ANALYSIS AND INTERPRETATION
-# # find which individuals were clustered together
-# labels = kmeans.labels_
-# results = {}
-# resultsWithTitles = {}
-# movie_index = newMovieData.index
-# for i in range(numClusters):
-#     results["Cluster " + str(i+1)] = []
-#     resultsWithTitles["Cluster " + str(i+1)] = []
-
-# for i in range(len(newMovieData)):
-#     results["Cluster " + str(labels[i]+1)].append(newMovieData.index[i])
-#     resultsWithTitles["Cluster " + str(labels[i]+1)].append(newMovieData["title"][i])
-
-
-# # print(len(results["Cluster 1"]))
-# # print(len(results["Cluster 2"]))
-# # print(len(results["Cluster 3"]))
-# # print(len(results["Cluster 4"]))
-
-# # Cluster 1 has 218 individuals
-# # Cluster 2 has 103 individuals
-# # Cluster 3 has 303 individuals
-# # Cluster 4 has 10 individuals
-
-# # print(results["Cluster 1"])
-# # print(results["Cluster 2"])
-# # print(results["Cluster 3"])
-# # print(results["Cluster 4"])
-
-
-# # plot the clusters using PCA with two principle components
-# def pca():
-#     pca = PCA(2)
-#     # transform the data using the PCA object
-#     reduced_data = pca.fit_transform(newMovieData.drop("title", axis=1))
-#     label = kmeans.fit_predict(reduced_data)
-    
-#     #filter rows of original data
-#     filtered_label0 = reduced_data[label == 0]
-#     filtered_label1 = reduced_data[label == 1]
-#     filtered_label2 = reduced_data[label == 2]
-#     filtered_label3 = reduced_data[label == 3]
- 
-#     #Plotting the results
-#     plt.scatter(filtered_label0[:,0] , filtered_label0[:,1] , color = 'red')
-#     plt.scatter(filtered_label1[:,0] , filtered_label1[:,1] , color = 'black')
-#     plt.scatter(filtered_label2[:,0] , filtered_label2[:,1] , color = 'orange')
-#     plt.scatter(filtered_label3[:,0] , filtered_label3[:,1] , color = 'blue')
-#     plt.xlabel("First Principal Component", fontsize=20)
-#     plt.ylabel("Second Principal Component", fontsize=20)
-#     plt.tick_params(axis='both', which='major', labelsize=18)  # Adjust numerical label size here
-#     plt.legend(["Cluster 1", "Cluster 2", "Cluster 3", "Cluster 4"], fontsize=18)
-#     plt.show()
-
-# print(pca())
 
