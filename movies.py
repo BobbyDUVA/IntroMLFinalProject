@@ -140,20 +140,23 @@ def knn_predict_regression(X_train, y_train, X_test, k=3): #Source Notebook 3: 1
 
 def compute_metrics(y_true, y_pred): #Idea taken directly from Notebook 3 again, section 1.6
     rmse = np.sqrt(np.mean((y_true - y_pred) ** 2))
+    mae = np.mean(np.abs(y_true - y_pred))
+
     #I just added RMSE for a comparison since you know it's, 
     #regression instead of classification this time, different ball game.
     #I would add accuracy, recall, precision, but as you are well aware that only works 
     #for classification problems.
-    return rmse
+    return rmse, mae
 
 y_pred = knn_predict_regression(X_train, y_train, X_test, k=5)
-rmse_non_normalized = compute_metrics(y_test, y_pred)
-print("RMSE NON NORMALIZED: " + str(rmse_non_normalized))
+mae_non_normalized, rmse_non_normalized = compute_metrics(y_test, y_pred)
+print("KNN MAE NON NORMALIZED: " + str(mae_non_normalized))
+print("KNN RMSE NON NORMALIZED: " + str(rmse_non_normalized))
 
 y_pred_norm = knn_predict_regression(X_train_norm, y_train, X_test_norm, k=5)
-rmse_normalized = compute_metrics(y_test, y_pred_norm)
-print("RMSE NORMALIZED: " + str(rmse_normalized))
-
+mae_normalized, rmse_normalized = compute_metrics(y_test, y_pred_norm)
+print("KNN MAE NORMALIZED: " + str(mae_normalized))
+print("KNN RMSE NORMALIZED: " + str(rmse_normalized))
 from sklearn.linear_model import LinearRegression
 
 def linear_regression_predict(X_train, y_train, X_test): #Source Notebook 8: Part 3
@@ -167,12 +170,14 @@ def linear_regression_predict(X_train, y_train, X_test): #Source Notebook 8: Par
 
 
 y_pred_linear = linear_regression_predict(X_train, y_train, X_test)
-rmse_linear_non_normalized = compute_metrics(y_test, y_pred_linear)
+mae_linear_non_normalized, rmse_linear_non_normalized = compute_metrics(y_test, y_pred_linear)
+print("LINEAR REGRESSION MAE NON NORMALIZED: " + str(mae_linear_non_normalized))
 print("LINEAR REGRESSION RMSE NON NORMALIZED: " + str(rmse_linear_non_normalized))
 
 
 y_pred_linear_norm = linear_regression_predict(X_train_norm, y_train, X_test_norm)
-rmse_linear_normalized = compute_metrics(y_test, y_pred_linear_norm)
+mae_linear_normalized, rmse_linear_normalized = compute_metrics(y_test, y_pred_linear_norm)
+print("LINEAR REGRESSION MAE NORMALIZED: " + str(mae_linear_normalized))
 print("LINEAR REGRESSION RMSE NORMALIZED: " + str(rmse_linear_normalized))
 
 print("We expect the feature normalization to not change anything for the linear regression model " \
