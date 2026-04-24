@@ -139,24 +139,24 @@ def knn_predict_regression(X_train, y_train, X_test, k=3): #Source Notebook 3: 1
     return np.array(predictions)
 
 def compute_metrics(y_true, y_pred): #Idea taken directly from Notebook 3 again, section 1.6
-    rmse = np.sqrt(np.mean((y_true - y_pred) ** 2))
     mae = np.mean(np.abs(y_true - y_pred))
-
-    #I just added RMSE for a comparison since you know it's, 
+    rmse = np.sqrt(np.mean((y_true - y_pred) ** 2))
+    #I just added MAE and RMSE for a comparison since you know it's, 
     #regression instead of classification this time, different ball game.
     #I would add accuracy, recall, precision, but as you are well aware that only works 
     #for classification problems.
-    return rmse, mae
+    return mae, rmse
 
 y_pred = knn_predict_regression(X_train, y_train, X_test, k=5)
 mae_non_normalized, rmse_non_normalized = compute_metrics(y_test, y_pred)
-print("KNN MAE NON NORMALIZED: " + str(mae_non_normalized))
-print("KNN RMSE NON NORMALIZED: " + str(rmse_non_normalized))
+print("MAE NON NORMALIZED: " + str(mae_non_normalized))
+print("RMSE NON NORMALIZED: " + str(rmse_non_normalized))
 
 y_pred_norm = knn_predict_regression(X_train_norm, y_train, X_test_norm, k=5)
 mae_normalized, rmse_normalized = compute_metrics(y_test, y_pred_norm)
-print("KNN MAE NORMALIZED: " + str(mae_normalized))
-print("KNN RMSE NORMALIZED: " + str(rmse_normalized))
+print("MAE NORMALIZED: " + str(mae_normalized))
+print("RMSE NORMALIZED: " + str(rmse_normalized))
+
 from sklearn.linear_model import LinearRegression
 
 def linear_regression_predict(X_train, y_train, X_test): #Source Notebook 8: Part 3
@@ -207,14 +207,15 @@ def neural_network_predict(X_train, y_train, X_test):
     return model, y_pred
 
 model_nn, y_pred_nn = neural_network_predict(X_train, y_train, X_test)
-rmse_nn_non_normalized = compute_metrics(y_test, y_pred_nn)
+mae_nn_non_normalized, rmse_nn_non_normalized = compute_metrics(y_test, y_pred_nn)
+print("NEURAL NETWORK MAE NON NORMALIZED: " + str(mae_nn_non_normalized))
 print("NEURAL NETWORK RMSE NON NORMALIZED: " + str(rmse_nn_non_normalized))
 print("NEURAL NETWORK EPOCHS NON NORMALIZED: " + str(model_nn.n_iter_))
 
 
-# Neural Network with normalization
 model_nn_norm, y_pred_nn_norm = neural_network_predict(X_train_norm, y_train, X_test_norm)
-rmse_nn_normalized = compute_metrics(y_test, y_pred_nn_norm)
+mae_nn_normalized, rmse_nn_normalized = compute_metrics(y_test, y_pred_nn_norm)
+print("NEURAL NETWORK MAE NORMALIZED: " + str(mae_nn_normalized))
 print("NEURAL NETWORK RMSE NORMALIZED: " + str(rmse_nn_normalized))
 print("NEURAL NETWORK EPOCHS NORMALIZED: " + str(model_nn_norm.n_iter_))
 
