@@ -156,3 +156,24 @@ print("RMSE NORMALIZED: " + str(rmse_normalized))
 
 from sklearn.linear_model import LinearRegression
 
+def linear_regression_predict(X_train, y_train, X_test): #Source Notebook 8: Part 3
+    #Linear regression model, copied almost directly from the notebook
+    model = LinearRegression()
+    model.fit(X_train, y_train)
+
+    y_pred = model.predict(X_test)
+
+    return y_pred
+
+
+y_pred_linear = linear_regression_predict(X_train, y_train, X_test)
+rmse_linear_non_normalized = compute_metrics(y_test, y_pred_linear)
+print("LINEAR REGRESSION RMSE NON NORMALIZED: " + str(rmse_linear_non_normalized))
+
+
+y_pred_linear_norm = linear_regression_predict(X_train_norm, y_train, X_test_norm)
+rmse_linear_normalized = compute_metrics(y_test, y_pred_linear_norm)
+print("LINEAR REGRESSION RMSE NORMALIZED: " + str(rmse_linear_normalized))
+
+print("We expect the feature normalization to not change anything for the linear regression model " \
+"any discrepancies are likely due to floating point rounding or something of that nature")
